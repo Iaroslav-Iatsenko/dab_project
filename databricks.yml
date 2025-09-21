@@ -1,0 +1,59 @@
+# This is a Databricks asset bundle definition for dab_project.
+# See https://docs.databricks.com/dev-tools/bundles/index.html for documentation.
+bundle:
+  name: dab_project
+  uuid: fd73c951-783e-4d24-8a3c-9bfc981f8188
+
+include:
+  - resources/*.yml
+  - resources/*/*.yml
+
+variables:
+  catalog:
+    default: "citibike_dev"
+
+targets:
+  dev:
+    # The default target uses 'mode: development' to create a development copy.
+    # - Deployed resources get prefixed with '[dev my_user_name]'
+    # - Any job schedules and triggers are paused by default.
+    # See also https://docs.databricks.com/dev-tools/bundles/deployment-modes.html.
+    mode: development
+    default: true
+    workspace:
+      host: https://adb-1568714529488494.14.azuredatabricks.net
+
+    presets:
+      # Set dynamic_version: true on all artifacts of type "whl".
+      # This makes "bundle deploy" add a timestamp to wheel's version before uploading,
+      # new wheel takes over the previous installation even if actual wheel version is unchanged.
+      # See https://docs.databricks.com/aws/en/dev-tools/bundles/settings
+      artifacts_dynamic_version: true
+  
+  test:
+    mode: production
+    variables:
+      catalog:
+        default: "citibike_test"
+    presets: 
+      name_prefix: '[testing] '
+    workspace:
+      host: https://adb-565992280674373.13.azuredatabricks.net
+      # We explicitly deploy to /Workspace/Users/iaroslav.iatsenko@gmail.com to make sure we only have a single copy.
+      root_path: /Workspace/Shared/.bundle/${bundle.name}/${bundle.target}
+    permissions:
+      - user_name: iaroslav.iatsenko@gmail.com
+        level: CAN_MANAGE
+
+  prod:
+    mode: production
+    variables:
+      catalog:
+        default: "citibike_prod"
+    workspace:
+      host: https://adb-409699045454497.17.azuredatabricks.net
+      # We explicitly deploy to /Workspace/Users/iaroslav.iatsenko@gmail.com to make sure we only have a single copy.
+      root_path: /Workspace/Shared/.bundle/${bundle.name}/${bundle.target}
+    permissions:
+      - user_name: iaroslav.iatsenko@gmail.com
+        level: CAN_MANAGE
