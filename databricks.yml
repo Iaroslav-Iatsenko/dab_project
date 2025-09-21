@@ -42,8 +42,11 @@ targets:
       # We explicitly deploy to /Workspace/Users/iaroslav.iatsenko@gmail.com to make sure we only have a single copy.
       root_path: /Workspace/Shared/.bundle/${bundle.name}/${bundle.target}
     permissions:
-      - user_name: iaroslav.iatsenko@gmail.com
+      - service_principal_name: e2d7f0ac-5ef2-4b2c-b7b5-275b01e050d6
         level: CAN_MANAGE
+    run_as:
+      service_principal_name: e2d7f0ac-5ef2-4b2c-b7b5-275b01e050d6
+
 
   prod:
     mode: production
@@ -55,5 +58,7 @@ targets:
       # We explicitly deploy to /Workspace/Users/iaroslav.iatsenko@gmail.com to make sure we only have a single copy.
       root_path: /Workspace/Shared/.bundle/${bundle.name}/${bundle.target}
     permissions:
-      - user_name: iaroslav.iatsenko@gmail.com
+      - service_principal_name: 2f6d81de-04f1-4370-89da-24a71e0b9be4
         level: CAN_MANAGE
+    run_as:
+      service_principal_name: 2f6d81de-04f1-4370-89da-24a71e0b9be4
